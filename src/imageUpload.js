@@ -1,86 +1,18 @@
-// import React, { useState } from "react";
-// import { create } from "ipfs-http-client";
-
-// const ipfs = create({
-//   host: "ipfs.infura.io",
-//   port: 5001,
-//   protocol: "https",
-//   headers: {
-//     authorization: "Bearer 2f8f28187b6b4cb6950616e88ecf6565:2f8f28187b6b4cb6950616e88ecf6565",
-//   },
-// });
-// console.log("here======================")
-// function App() {
-//   const [file, setFile] = useState(null);
-//   const [ipfsHash, setIpfsHash] = useState("");
-//   const [loading, setLoading] = useState(false);
-
-//   const captureFile = (event) => setFile(event.target.files[0]);
-
-//   const onSubmit = async (event) => {
-//     event.preventDefault();
-//     setLoading(true);
-//     try {
-//       const reader = new window.FileReader();
-//       reader.readAsDataURL(file);
-//       reader.onloadend = async () => {
-//         const base64String = reader.result.replace(/^data:.+;base64,/, "");
-//         const { cid } = await ipfs.add(base64String);
-//         setIpfsHash(cid.string);
-//       };
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const getImage = async () => {
-//     setLoading(true);
-//     try {
-//       const { content } = await ipfs.get(ipfsHash);
-//       console.log(content);
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <form onSubmit={onSubmit}>
-//         <input type="file" onChange={captureFile} />
-//         <button type="submit">Upload</button>
-//       </form>
-//       {loading && <p>Loading...</p>}
-//       {ipfsHash && <p>IPFS Hash: {ipfsHash}</p>}
-//       {ipfsHash && <button onClick={getImage}>Get Image</button>}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-
-
-
 import { useState } from 'react';
 import './App.css';
 import { Button, Form } from 'react-bootstrap';
 import Loader from './Loader';
 import { encode as base64_encode } from 'base-64';
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import Layout from "./pages/Layout";
+// import Home from "./pages/Home";
+// import Blogs from "./pages/Blogs";
+// import Contact from "./pages/Contact";
+// import NoPage from "./pages/NoPage";
+import mintNft from "./mintNft"
 import dotenv from 'dotenv'; // import dotenv as a module instead of using require
 import IPFS from 'ipfs-api'; // use the recommended ES6 import syntax
-// import { Router } from 'react-router-dom/cjs/react-router-dom.min';
-
 dotenv.config();
 
 const secrets = process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET;
@@ -96,7 +28,7 @@ const ipfs = new IPFS({
 });
 
 function App() {
-  const [buf, setBuf] = useState(null); 
+  const [buf, setBuf] = useState(null); // initialize buf with null
   const [hash, setHash] = useState('');
   const [updateHash, setupdateHash] = useState('');
   const [loader, setLoader] = useState(false);
@@ -105,21 +37,41 @@ function App() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [ipfsId, setIpfsId] = useState('');
+  const [WalletAddress,setWalletAddress] = useState("");
   const createJSONFile = (data, fileName) => {
+    // implement the createJSONFile function
   };
 
+//   async function main() {
+//   console.log('Requesting accounts...')
 
+//   if (window.ethereum) {
+//     console.log('Ethereum browser extension detected')
 
-  // const handleExport = () => {
-  //   const myData = {
-  //     Name: name,
-  //     Description: description,
-  //     Hash: 'https://ipfs.io/ipfs/' + hash,
-  //   };
+//     try {
+//       const accounts = await window.ethereum.request({
+//         method: 'eth_requestAccounts'
+//       })
+//        setWalletAddress(accounts[0]);
+//       console.log('Retrieved accounts:', accounts)
+//     } catch (error) {
+//       console.error('Error retrieving accounts:', error)
+//     }
+//   } else {
+//     console.log('No Ethereum browser extension detected')
+//   }
+// }
 
-  //   createJSONFile(myData, 'myData.json');
-  //   console.log(myData, 'MyjsonFile');
-  // };
+//   const handleExport = () => {
+//     const myData = {
+//       Name: name,
+//       Description: description,
+//       Hash: 'https://ipfs.io/ipfs/' + hash,
+//     };
+
+//     createJSONFile(myData, 'myData.json');
+//     console.log(myData, 'MyjsonFile');
+//   };
 
   const captureFile = (event) => {
     event.stopPropagation();
@@ -189,6 +141,8 @@ return (
     <Form onSubmit={onSubmit}>
       <input type="file" onChange={captureFile} required />
       <Button type="submit">Upload</Button>
+        {/* <Button onClick={()=>{main()}}>Connect</Button>
+        <h3>Wallet Adress:{WalletAddress}</h3> */}
     </Form>
 
     {showLinks && showLinks ?
@@ -244,6 +198,12 @@ return (
             
     }
   
+  {/* <BrowserRouter>
+      <Routes>
+        <Route path='minNft' element={<mintNft/>}/>
+      </Routes>
+    </BrowserRouter>
+    <button>MintNFT</button> */}
 </div>
 
 );
@@ -251,6 +211,4 @@ return (
 
 
 export default App;
-
-
 

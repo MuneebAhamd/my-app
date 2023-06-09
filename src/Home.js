@@ -1,77 +1,3 @@
-// import React, { useState } from "react";
-// import { create } from "ipfs-http-client";
-
-// const ipfs = create({
-//   host: "ipfs.infura.io",
-//   port: 5001,
-//   protocol: "https",
-//   headers: {
-//     authorization: "Bearer 2f8f28187b6b4cb6950616e88ecf6565:2f8f28187b6b4cb6950616e88ecf6565",
-//   },
-// });
-// console.log("here======================")
-// function App() {
-//   const [file, setFile] = useState(null);
-//   const [ipfsHash, setIpfsHash] = useState("");
-//   const [loading, setLoading] = useState(false);
-
-//   const captureFile = (event) => setFile(event.target.files[0]);
-
-//   const onSubmit = async (event) => {
-//     event.preventDefault();
-//     setLoading(true);
-//     try {
-//       const reader = new window.FileReader();
-//       reader.readAsDataURL(file);
-//       reader.onloadend = async () => {
-//         const base64String = reader.result.replace(/^data:.+;base64,/, "");
-//         const { cid } = await ipfs.add(base64String);
-//         setIpfsHash(cid.string);
-//       };
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const getImage = async () => {
-//     setLoading(true);
-//     try {
-//       const { content } = await ipfs.get(ipfsHash);
-//       console.log(content);
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <form onSubmit={onSubmit}>
-//         <input type="file" onChange={captureFile} />
-//         <button type="submit">Upload</button>
-//       </form>
-//       {loading && <p>Loading...</p>}
-//       {ipfsHash && <p>IPFS Hash: {ipfsHash}</p>}
-//       {ipfsHash && <button onClick={getImage}>Get Image</button>}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-
-
-
 import { useState } from 'react';
 import './App.css';
 import { Button, Form } from 'react-bootstrap';
@@ -79,7 +5,7 @@ import Loader from './Loader';
 import { encode as base64_encode } from 'base-64';
 import dotenv from 'dotenv'; // import dotenv as a module instead of using require
 import IPFS from 'ipfs-api'; // use the recommended ES6 import syntax
-// import { Router } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, Router } from 'react-router-dom/cjs/react-router-dom.min';
 
 dotenv.config();
 
@@ -95,7 +21,7 @@ const ipfs = new IPFS({
   },
 });
 
-function App() {
+function home() {
   const [buf, setBuf] = useState(null); 
   const [hash, setHash] = useState('');
   const [updateHash, setupdateHash] = useState('');
@@ -110,16 +36,16 @@ function App() {
 
 
 
-  // const handleExport = () => {
-  //   const myData = {
-  //     Name: name,
-  //     Description: description,
-  //     Hash: 'https://ipfs.io/ipfs/' + hash,
-  //   };
+  const handleExport = () => {
+    const myData = {
+      Name: name,
+      Description: description,
+      Hash: 'https://ipfs.io/ipfs/' + hash,
+    };
 
-  //   createJSONFile(myData, 'myData.json');
-  //   console.log(myData, 'MyjsonFile');
-  // };
+    createJSONFile(myData, 'myData.json');
+    console.log(myData, 'MyjsonFile');
+  };
 
   const captureFile = (event) => {
     event.stopPropagation();
@@ -229,6 +155,7 @@ return (
 {updateHash && showMetadataForm && (
   <p>https://ipfs.io/ipfs/{updateHash}</p>
  
+ 
 )}
                 </form>
               </div>
@@ -243,14 +170,14 @@ return (
       </p>  
             
     }
-  
+ <Link to="/mintNft">
+        <Button>Mint Nft</Button>
+      </Link>
 </div>
 
 );
 }
 
 
-export default App;
-
-
+export default home;
 
